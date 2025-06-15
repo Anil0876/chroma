@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CROMA E-Bill Invoice</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Material+Icons" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Material+Icons" rel="stylesheet" />
 <style>
   /* Reset & base */
   *, *::before, *::after {
@@ -20,6 +20,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   a {
     color: #3b82f6;
@@ -34,48 +35,53 @@
   .container {
     max-width: 900px;
     margin: 2rem auto 4rem auto;
-    padding: 1rem 1.5rem 3rem 1.5rem;
-    background: rgba(255 255 255 / 0.85);
+    padding: 2rem 2.5rem 3rem 2.5rem;
+    background: rgba(255 255 255 / 0.95);
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
-    backdrop-filter: saturate(180%) blur(10px);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+    backdrop-filter: saturate(180%) blur(14px);
     width: 90%;
+    display: block;
   }
 
   /* Header */
   header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 72px 1fr;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
   header img.logo {
-    height: 48px;
-    width: auto;
+    width: 72px;
+    height: auto;
     border-radius: 8px;
+    justify-self: start;
   }
   header div.header-text {
     font-weight: 700;
     font-size: 1.25rem;
     color: #101827;
+    line-height: 1.2;
   }
   header div.header-subtext {
     font-size: 0.875rem;
     font-weight: 500;
     color: #475569;
-    margin-top: 0.125rem;
+    margin-top: 0.2rem;
   }
 
   /* Company contact */
   .company-info {
     font-size: 0.875rem;
     color: #475569;
-    margin-bottom: 2rem;
-    line-height: 1.4;
+    margin-top: 0.6rem;
+    line-height: 1.45;
   }
   .company-info a {
     color: #2563eb;
     font-weight: 600;
+    word-break: break-all;
   }
 
   /* Title */
@@ -83,7 +89,7 @@
     font-weight: 700;
     font-size: 2rem;
     color: #1e293b;
-    margin-bottom: 1rem;
+    margin: 2rem 0 1rem 0;
   }
 
   /* Section title */
@@ -91,26 +97,28 @@
     font-weight: 600;
     font-size: 1.25rem;
     border-bottom: 3px solid #3b82f6;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.3rem;
     margin-bottom: 1rem;
     color: #1e293b;
   }
 
   /* Customer & payment info grids */
   .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem 3rem;
-    margin-bottom: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem 4rem;
+    margin-bottom: 3rem;
   }
   .info-block {
     font-size: 0.95rem;
     line-height: 1.5;
     color: #334155;
+    min-width: 280px;
+    flex: 1 1 280px;
   }
   .info-block strong {
     display: inline-block;
-    width: 130px;
+    width: 140px;
     font-weight: 600;
     color: #1e293b;
   }
@@ -119,41 +127,42 @@
   table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 16px;
+    border-spacing: 0 20px;
   }
   thead tr th {
     text-align: left;
     font-weight: 600;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
     color: #0f172a;
     border-bottom: 3px solid #60a5fa;
+    background: transparent;
   }
   tbody tr {
     background: rgba(147,197,253,0.15);
-    box-shadow: 0 2px 6px rgb(96 165 250 / 0.15);
-    border-radius: 12px;
+    box-shadow: 0 3px 10px rgb(96 165 250 / 0.15);
+    border-radius: 14px;
     transition: transform 0.3s ease;
   }
   tbody tr:hover {
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(59, 130, 246, 0.22);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgb(59 130 246 / 0.3);
+    box-shadow: 0 10px 24px rgb(59 130 246 / 0.32);
   }
   tbody tr td {
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1rem 1.2rem;
     vertical-align: middle;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #102a43;
     border: none;
   }
-  tbody tr td:nth-child(1), 
-  tbody tr td:nth-child(4), 
+  tbody tr td:nth-child(1),
+  tbody tr td:nth-child(4),
   tbody tr td:nth-child(5) {
     text-align: center;
-    font-weight: 600;
+    font-weight: 700;
   }
   tbody tr td:nth-child(3) {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   /* Total Paid */
@@ -161,32 +170,32 @@
     text-align: right;
     font-weight: 700;
     color: #1e293b;
-    font-size: 1.25rem;
-    margin-top: 1.5rem;
-    border-top: 2px solid #3b82f6;
-    padding-top: 0.75rem;
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    border-top: 3px solid #3b82f6;
+    padding-top: 1rem;
   }
 
   /* Warranty & Technical Info block */
   .warranty-info {
-    margin-top: 3rem;
-    font-size: 0.9rem;
+    margin-top: 3.5rem;
+    font-size: 1rem;
     color: #475569;
-    line-height: 1.6;
+    line-height: 1.7;
   }
   .warranty-info p {
-    margin: 0.25rem 0;
+    margin: 0.35rem 0;
   }
   .warranty-highlight {
-    font-weight: 600;
+    font-weight: 700;
     color: #1e293b;
-    margin: 0.5rem 0 0.75rem 0;
+    margin: 0.75rem 0 1rem 0;
   }
 
   /* Note block */
   .note {
-    margin-top: 2.5rem;
-    font-size: 0.85rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
     color: #64748b;
     font-style: italic;
   }
@@ -195,7 +204,7 @@
   .download-btn-container {
     width: 90%;
     max-width: 900px;
-    margin: 1.5rem auto 1.5rem auto;
+    margin: 1.5rem auto 2rem auto;
     display: flex;
     justify-content: center;
   }
@@ -203,34 +212,37 @@
     background-color: #2563eb;
     color: white;
     border: none;
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 16px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
   button#download-btn:hover,
   button#download-btn:focus {
     background-color: #1e40af;
-    box-shadow: 0 6px 18px rgba(30, 64, 175, 0.7);
+    box-shadow: 0 9px 24px rgba(30, 64, 175, 0.8);
     outline: none;
   }
 
   /* Responsive */
   @media (max-width: 640px) {
     .info-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 1.5rem 2rem;
+      display: block;
+    }
+    .info-block {
+      margin-bottom: 1.8rem;
+      min-width: 100%;
+      flex: none;
     }
     header {
-      flex-direction: column;
+      display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
-    }
-    .total-paid {
-      text-align: left;
+      flex-direction: row;
+      gap: 1rem;
     }
     .container {
       margin: 1rem auto 3rem auto;
@@ -239,9 +251,10 @@
     }
     button#download-btn {
       width: 100%;
-      padding: 14px;
-      font-size: 1.1rem;
+      padding: 16px;
+      font-size: 1.25rem;
       border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(37, 99, 235, 0.7);
     }
   }
 </style>
@@ -339,7 +352,7 @@
   <!-- Load html2pdf.js from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-     // Function to convert an image URL to base64 to avoid CORS issues in PDF
+    // Convert image url to base64 to avoid CORS problems in PDF and ensure inclusion
     function toDataURL(url) {
       return fetch(url)
         .then(response => response.blob())
@@ -358,28 +371,40 @@
         const base64 = await toDataURL(src);
         logoImg.src = base64;
       } catch(e) {
-        // If fetch or conversion fails, keep original src
-        console.warn('Failed to convert logo image to base64 for PDF inclusion', e);
+        console.warn('Logo image conversion failed', e);
       }
     }
 
-    document.getElementById('download-btn').addEventListener('click', async () => {
-      // Replace logo img src w/ base64 to include in PDF properly
+    async function generatePDF() {
       await replaceLogoWithBase64();
 
       const element = document.getElementById('invoice');
 
       const opt = {
-        margin:       0.4,
+        margin:       [0.4, 0.4, 0.4, 0.4],
         filename:     'CROMA_EBill.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false, letterRendering: true, windowWidth: document.documentElement.scrollWidth },
+        html2canvas:  {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          letterRendering: true,
+          dpi: 192,
+          scrollX: 0,
+          scrollY: -window.scrollY
+        },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
       };
 
-      // Generate PDF
-      html2pdf().set(opt).from(element).save();
-    });
+      // Fix layout width to A4 width for consistent PDF layout
+      element.style.width = '8.27in'; // A4 width in inches
+
+      html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf) => {
+        element.style.width = 'auto'; // Restore width after PDF generation
+      }).save();
+    }
+
+    document.getElementById('download-btn').addEventListener('click', generatePDF);
   </script>
 </body>
 </html>
