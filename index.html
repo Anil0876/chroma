@@ -195,7 +195,7 @@
   .download-btn-container {
     width: 90%;
     max-width: 900px;
-    margin: 1.5rem auto 0 auto;
+    margin: 1.5rem auto 1.5rem auto;
     display: flex;
     justify-content: center;
   }
@@ -247,7 +247,7 @@
 </style>
 </head>
 <body>
-  <main class="container" role="main" aria-label="E-Bill Invoice from CROMA">
+  <main id="invoice" class="container" role="main" aria-label="E-Bill Invoice from CROMA">
     <header>
       <img src="https://i.postimg.cc/VNZ9LYRM/Screenshot-1947-03-25-at-4-04-06-PM.png" alt="CROMA logo in blue and white" class="logo" />
       <div>
@@ -334,33 +334,26 @@
   </main>
 
   <div class="download-btn-container">
-    <button id="download-btn" aria-label="Download this e-bill">Download This E-Bill</button>
+    <button id="download-btn" aria-label="Download this e-bill as PDF">Download This E-Bill (PDF)</button>
   </div>
 
+  <!-- Load html2pdf.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     document.getElementById('download-btn').addEventListener('click', () => {
-      // Prepare HTML content for download
-      const doctype = '<!DOCTYPE html>';
-      const html = document.documentElement.outerHTML;
+      const element = document.getElementById('invoice');
 
-      const completeHtml = doctype + html;
+      const opt = {
+        margin:       0.4,
+        filename:     'CROMA_EBill.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: -window.scrollY },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
 
-      // Create a blob with the HTML content
-      const blob = new Blob([completeHtml], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-
-      // Create a temporary link to trigger download
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'CROMA_EBill.html';
-      document.body.appendChild(a);
-      a.click();
-
-      // Clean up
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      // Generate PDF
+      html2pdf().set(opt).from(element).save();
     });
   </script>
 </body>
 </html>
-
