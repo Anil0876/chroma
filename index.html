@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CROMA E-Bill Invoice</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Material+Icons" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #222;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    color: #3b82f6;
+    text-decoration: none;
+  }
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 2rem auto 4rem auto;
+    padding: 1rem 1.5rem 3rem 1.5rem;
+    background: rgba(255 255 255 / 0.85);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
+    backdrop-filter: saturate(180%) blur(10px);
+    width: 90%;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  header img.logo {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+  }
+  header div.header-text {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #101827;
+  }
+  header div.header-subtext {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    margin-top: 0.125rem;
+  }
+
+  /* Company contact */
+  .company-info {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+  }
+  .company-info a {
+    color: #2563eb;
+    font-weight: 600;
+  }
+
+  /* Title */
+  h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 1rem;
+  }
+
+  /* Section title */
+  h2.section-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    color: #1e293b;
+  }
+
+  /* Customer & payment info grids */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem 3rem;
+    margin-bottom: 2.5rem;
+  }
+  .info-block {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #334155;
+  }
+  .info-block strong {
+    display: inline-block;
+    width: 130px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 16px;
+  }
+  thead tr th {
+    text-align: left;
+    font-weight: 600;
+    padding-bottom: 8px;
+    color: #0f172a;
+    border-bottom: 3px solid #60a5fa;
+  }
+  tbody tr {
+    background: rgba(147,197,253,0.15);
+    box-shadow: 0 2px 6px rgb(96 165 250 / 0.15);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  tbody tr:hover {
+    background: rgba(59, 130, 246, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgb(59 130 246 / 0.3);
+  }
+  tbody tr td {
+    padding: 1rem 1rem 1rem 1rem;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #102a43;
+    border: none;
+  }
+  tbody tr td:nth-child(1), 
+  tbody tr td:nth-child(4), 
+  tbody tr td:nth-child(5) {
+    text-align: center;
+    font-weight: 600;
+  }
+  tbody tr td:nth-child(3) {
+    font-weight: 600;
+  }
+
+  /* Total Paid */
+  .total-paid {
+    text-align: right;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    border-top: 2px solid #3b82f6;
+    padding-top: 0.75rem;
+  }
+
+  /* Warranty & Technical Info block */
+  .warranty-info {
+    margin-top: 3rem;
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .warranty-info p {
+    margin: 0.25rem 0;
+  }
+  .warranty-highlight {
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0.5rem 0 0.75rem 0;
+  }
+
+  /* Note block */
+  .note {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: #64748b;
+    font-style: italic;
+  }
+
+  /* Download button */
+  .download-btn-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 1.5rem auto 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  button#download-btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  button#download-btn:hover,
+  button#download-btn:focus {
+    background-color: #1e40af;
+    box-shadow: 0 6px 18px rgba(30, 64, 175, 0.7);
+    outline: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .total-paid {
+      text-align: left;
+    }
+    .container {
+      margin: 1rem auto 3rem auto;
+      padding: 1rem 1rem 2rem 1rem;
+      width: 95%;
+    }
+    button#download-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      border-radius: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="E-Bill Invoice from CROMA">
+    <header>
+      <img src="https://i.postimg.cc/VNZ9LYRM/Screenshot-1947-03-25-at-4-04-06-PM.png" alt="CROMA logo in blue and white" class="logo" />
+      <div>
+        <div class="header-text">CROMA - A Tata Enterprise</div>
+        <div class="header-subtext">Infiniti Retail Ltd | <a href="https://www.croma.com" target="_blank" rel="noopener noreferrer">www.croma.com</a></div>
+      </div>
+    </header>
+
+    <section class="company-info" aria-label="Company information">
+      <div><strong>GSTIN:</strong> 27AABCI5460P1ZV</div>
+      <div><strong>Customer Care:</strong> 1800 57 27662</div>
+      <div><strong>Email:</strong> <a href="mailto:customersupport@croma.com">customersupport@croma.com</a></div>
+    </section>
+
+    <h1>E-Bill Invoice</h1>
+
+    <section class="info-grid" aria-label="Invoice and customer details">
+      <div class="info-block">
+        <p><strong>Invoice No:</strong> CROMA482931</p>
+        <p><strong>Date of Purchase:</strong> 15 April 2022</p>
+      </div>
+      <div class="info-block">
+        <p><strong>Customer Name:</strong> Anil Kumar</p>
+        <p><strong>Contact:</strong> 8168112166</p>
+      </div>
+      <div class="info-block">
+        <p><strong>Billing Address:</strong></p>
+        <p>81, Alimuddinpur Road,<br />
+           Alimuddinpur, Farrukhnagar,<br />
+           Gurgaon, Haryana - 122506</p>
+      </div>
+      <div class="info-block">
+        <p><strong>Payment Mode:</strong> Debit Card (HDFC Bank)</p>
+        <p><strong>Transaction ID:</strong> TXN-MBPRO2025-9187</p>
+      </div>
+    </section>
+
+    <section aria-label="Product details">
+      <h2 class="section-title">Product Details</h2>
+      <table role="table" aria-describedby="product-details-desc">
+        <thead>
+          <tr>
+            <th scope="col">Sr</th>
+            <th scope="col">Description</th>
+            <th scope="col">Model</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Final Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Apple MacBook Pro 15-inch (2018), Core i7, 16GB RAM</td>
+            <td>A1990</td>
+            <td>1</td>
+            <td>Rs. 73,589</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>87W USB-C Power Adapter (Compatible, Free)</td>
+            <td>87W</td>
+            <td>1</td>
+            <td>Rs. 0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="total-paid" aria-label="Total amount paid">Total Paid: Rs. 73,589</div>
+    </section>
+
+    <section class="warranty-info" aria-label="Warranty and technical information">
+      <p class="warranty-highlight">Warranty &amp; Technical Info</p>
+      <p><strong>Laptop:</strong> 1 Year Apple International Warranty from Purchase Date</p>
+      <p><strong>Charger:</strong> Covered under MacBook warranty</p>
+      <p><strong>Serial Number:</strong> C02X5HF6JG5H</p>
+      <p><strong>EMC:</strong> 3215</p>
+      <p><strong>Rated:</strong> 20.2V - 4.3A max</p>
+      <p><strong>Model:</strong> A1990</p>
+    </section>
+
+    <section class="note" aria-label="Invoice note">
+      <p>Note: This is a computer-generated invoice and does not require a signature.</p>
+    </section>
+  </main>
+
+  <div class="download-btn-container">
+    <button id="download-btn" aria-label="Download this e-bill">Download This E-Bill</button>
+  </div>
+
+  <script>
+    document.getElementById('download-btn').addEventListener('click', () => {
+      // Prepare HTML content for download
+      const doctype = '<!DOCTYPE html>';
+      const html = document.documentElement.outerHTML;
+
+      const completeHtml = doctype + html;
+
+      // Create a blob with the HTML content
+      const blob = new Blob([completeHtml], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      // Create a temporary link to trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'CROMA_EBill.html';
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+
