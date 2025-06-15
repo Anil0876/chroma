@@ -249,18 +249,17 @@
 <body>
   <main id="invoice" class="container" role="main" aria-label="E-Bill Invoice from CROMA">
     <header>
-      <img src="https://i.postimg.cc/VNZ9LYRM/Screenshot-1947-03-25-at-4-04-06-PM.png" alt="CROMA logo in blue and white" class="logo" />
+      <img id="logo-img" src="https://i.postimg.cc/VNZ9LYRM/Screenshot-1947-03-25-at-4-04-06-PM.png" alt="CROMA logo in blue and white" class="logo" />
       <div>
         <div class="header-text">CROMA - A Tata Enterprise</div>
         <div class="header-subtext">Infiniti Retail Ltd | <a href="https://www.croma.com" target="_blank" rel="noopener noreferrer">www.croma.com</a></div>
+        <div class="company-info" aria-label="Company contact details">
+          <p><strong>GSTIN:</strong> 27AABCI5460P1ZV</p>
+          <p><strong>Customer Care:</strong> 1800 57 27662</p>
+          <p><strong>Email:</strong> <a href="mailto:customersupport@croma.com">customersupport@croma.com</a></p>
+        </div>
       </div>
     </header>
-
-    <section class="company-info" aria-label="Company information">
-      <div><strong>GSTIN:</strong> 27AABCI5460P1ZV</div>
-      <div><strong>Customer Care:</strong> 1800 57 27662</div>
-      <div><strong>Email:</strong> <a href="mailto:customersupport@croma.com">customersupport@croma.com</a></div>
-    </section>
 
     <h1>E-Bill Invoice</h1>
 
@@ -340,14 +339,41 @@
   <!-- Load html2pdf.js from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    document.getElementById('download-btn').addEventListener('click', () => {
+     // Function to convert an image URL to base64 to avoid CORS issues in PDF
+    function toDataURL(url) {
+      return fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }));
+    }
+
+    async function replaceLogoWithBase64() {
+      const logoImg = document.getElementById('logo-img');
+      const src = logoImg.src;
+      try {
+        const base64 = await toDataURL(src);
+        logoImg.src = base64;
+      } catch(e) {
+        // If fetch or conversion fails, keep original src
+        console.warn('Failed to convert logo image to base64 for PDF inclusion', e);
+      }
+    }
+
+    document.getElementById('download-btn').addEventListener('click', async () => {
+      // Replace logo img src w/ base64 to include in PDF properly
+      await replaceLogoWithBase64();
+
       const element = document.getElementById('invoice');
 
       const opt = {
         margin:       0.4,
         filename:     'CROMA_EBill.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: -window.scrollY },
+        html2canvas:  { scale: 2, useCORS: true, logging: false, letterRendering: true, windowWidth: document.documentElement.scrollWidth },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
       };
 
@@ -357,3 +383,4 @@
   </script>
 </body>
 </html>
+
